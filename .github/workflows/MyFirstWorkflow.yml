@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Running Single Commend
-        run:  echo"hi it's my first step"
+        run:  echo "hi it's my first step"
       - name: Checking os release
         run: cat /etc/os-release
