@@ -1,3 +1,13 @@
 name: my-first-workflow
 # to get trigger on every push in the repo
 on: push
+
+jobs:
+  job1:
+    name: JoB1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Running Single Commend
+        run:  echo"hi it's my first step"
+      - name: Checking os release
+        run: cat /etc/os-release
