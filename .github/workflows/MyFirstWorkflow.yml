@@ -28,7 +28,7 @@ jobs:
       - name: upload2
         uses: actions/upload-artifact@v4
         with:
-          name: directory
+          name: directory_file
           path: artifact/
       - name: upload3
         uses: actions/upload-artifact@v4
@@ -58,6 +58,23 @@ jobs:
         uses: actions/download-artifact@v8
         with: 
           name: single_file
+      - name: checking current directory post download
+        run: |
+          pwd
+          ls -ltr
+  job3:
+    name: job3
+    needs: job1
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checking current directory
+        run: |
+          pwd
+          ls -ltr
+      - name: download artifact
+        uses: actions/download-artifact@v8
+        with: 
+          name: directory_file
       - name: checking current directory post download
         run: |
           pwd
