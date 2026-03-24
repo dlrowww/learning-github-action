@@ -11,3 +11,13 @@ jobs:
         run:  echo "hi it's my first step"
       - name: Checking os release
         run: cat /etc/os-release
+  job2:
+    name: Job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: check hostname
+        run: hostname
+      - name: running multiple
+        run: |
+          echo "hi from simon"
+          echo "current time is `date`"
