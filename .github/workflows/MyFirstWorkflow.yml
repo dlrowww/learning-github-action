@@ -55,7 +55,7 @@ jobs:
           ls -ltr
       - name: 
         uses: actions/download-artifact@v8
-        wtih: 
+        with: 
           name: single_file
       - name: checking current directory post download
         run: |
