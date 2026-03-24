@@ -47,6 +47,7 @@ jobs:
             !**/hostname.txt              #exclusion
   job2:
     name: job2
+    needs: job1
     runs-on: ubuntu-22.04
     steps:
       - name: checking current directory
