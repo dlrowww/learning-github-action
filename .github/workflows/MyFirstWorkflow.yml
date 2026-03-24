@@ -7,40 +7,18 @@ jobs:
     name: JoB1
     runs-on: ubuntu-latest
     steps:
-      - name: Running Single Commend
-        run:  echo "hi it's my first step"
-      - name: Checking os release
-        run: cat /etc/os-release
-  job2:
-    name: Job2
-    runs-on: ubuntu-latest
-    steps:
-      - name: check hostname
-        run: hostname
-      - name: running multiple
+      - name: Step-1
         run: |
-          echo "hi from simon"
-          echo "current time is `date`"
-  job3:
-    name: job3
-    needs: job1
-    runs-on: windows-latest
-    steps: 
-      - name: job with single dependency
-        run: sleep 10
-      - name: check info
-        shell: pwsh
-        run: get-computerinfo
-  job4: 
-    name: job4
-    needs: [job1, job2, job3]
-    runs-on: macos-latest
-    steps:
-      - name: job for multiple dependency
-        run: sleep 10
-      - name: checking runner info
-        run: sw_vers
-
+          pwd
+          ls -ltr
+          hostname
+      - name: step2-Checkout
+        uses: actions/checkout@v6.0.2
+      - name: step3
+        run: |
+          pwd
+          ls -ltr
+          hostname
 
 
 
