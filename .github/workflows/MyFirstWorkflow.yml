@@ -45,8 +45,22 @@ jobs:
             ./myartifact.txt
             artifact/
             !**/hostname.txt              #exclusion
-            
-
+  job2:
+    name: job2
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checking current directory
+        run: |
+          pwd
+          ls -ltr
+      - name: 
+        uses: actions/download-artifact@v8
+        wtih: 
+          name: single_file
+      - name: checking current directory post download
+        run: |
+          pwd
+          ls -ltr
 
 
 
