@@ -4,6 +4,7 @@ on:
   push:
   schedule:
     - cron: "*/5 * * * *"
+  workflow_dispatch:
 jobs:
   job1:
     name: JoB1
