@@ -74,8 +74,9 @@ jobs:
       - name: step for fail
         run: exit 0
       - name: referring environment variable
-        run: echo "[INFO] Running Deployment for $ENV_TYPE with user $APP_USER."
-             echo "[INFO] Once deployment application is accessiable on port $APP_PORT." 
+        run: |
+          echo "[INFO] Running Deployment for $ENV_TYPE with user $APP_USER."
+          echo "[INFO] Once deployment application is accessiable on port $APP_PORT." 
       - name: referring respository secret
         run: |
           echo "[INFO] application password is ${{ secrets.APP_PASSWORD }}"
