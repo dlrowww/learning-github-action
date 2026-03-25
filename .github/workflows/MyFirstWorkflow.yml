@@ -103,7 +103,7 @@ jobs:
       - name: referring environment secrets
         run: echo "[INFO] Password for ${{ vars.USER }} is ${{ secrets.PASSWORD }}"
   production:
-    if: github.head_ref == 'main'
+    if: github.ref_name == 'main'
     name: production deployment
     runs-on: ubuntu-latest
     environment:
