@@ -32,7 +32,7 @@ jobs:
         # --cov         → 开启覆盖率统计
         # --cov-report  → 指定覆盖率输出方式
       - name: Upload test report
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: unit-test-report
           path: reports/
