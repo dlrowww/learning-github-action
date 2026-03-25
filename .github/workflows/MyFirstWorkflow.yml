@@ -88,10 +88,10 @@ jobs:
         run: |
           echo "[INFO] triggered by ${{ github.event_name }}"
           echo "[INFO] New changes are added by ${{ github.actor }}"
-          echo "[INFO] current step is running on ${{ runner.os }}"
+          echo "[INFO] current step is running on ${{ runner.os }} on ${{ github.ref }}"
           echo "[INFO] Current job id is ${{ job.check_run_id }}"
   staging:
-    if: github.ref == 'refs/heads/dev'
+    if: github.head_ref == 'refs/heads/dev'
     name: stage deployment
     runs-on: ubuntu-latest
     environment:
@@ -102,7 +102,7 @@ jobs:
       - name: referring environment secrets
         run: echo "[INFO] Password for ${{ vars.USER }} is ${{ secrets.PASSWORD }}"
   production:
-    if: github.ref == 'refs/heads/dev'
+    if: github.head_ref == 'refs/heads/dev'
     name: production deployment
     runs-on: ubuntu-latest
     environment:
