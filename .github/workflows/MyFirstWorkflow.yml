@@ -89,7 +89,7 @@ jobs:
           echo "[INFO] New changes are added by ${{ github.actor }}"
           echo "[INFO] current step is running on ${{ runner.os }} on ${{ github.ref }}"
           echo "[INFO] Current job id is ${{ job.check_run_id }}"
-          echo "[INFO] "head_ref is ${{ github.head_ref }}"
+          echo "[INFO] head_ref is ${{ github.head_ref }}"
   staging:
     if: github.head_ref == 'dev'
     name: stage deployment
