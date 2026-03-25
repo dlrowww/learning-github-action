@@ -4,7 +4,6 @@ on:
   push: 
     branches:
       - main
-      - dev
   pull_request:
     branches:
       - main
@@ -92,7 +91,7 @@ jobs:
           echo "[INFO] Current job id is ${{ job.check_run_id }}"
           echo "[INFO] "head_ref is ${{ github.head_ref }}"
   staging:
-    if: github.head_ref == 'refs/heads/dev'
+    if: github.head_ref == 'dev'
     name: stage deployment
     runs-on: ubuntu-latest
     environment:
@@ -103,7 +102,7 @@ jobs:
       - name: referring environment secrets
         run: echo "[INFO] Password for ${{ vars.USER }} is ${{ secrets.PASSWORD }}"
   production:
-    if: github.head_ref == 'refs/heads/dev'
+    if: github.head_ref == 'main'
     name: production deployment
     runs-on: ubuntu-latest
     environment:
