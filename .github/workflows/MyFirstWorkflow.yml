@@ -108,7 +108,7 @@ jobs:
       - name: referring environment variabele
         run: echo "[INFO] running deployment on ${{ vars.HOST }} using ${{ vars.USER }}"
       - name: referring environment secrets
-        run: echo "[INFO] Password for ${{ vars.USER }} is ${{ secrets.PASSWORD }}"
+        run: echo "[INFO] Password for ${{ vars.USER }} is ${{ secrets.PASSWORD }}."
 
 
 
