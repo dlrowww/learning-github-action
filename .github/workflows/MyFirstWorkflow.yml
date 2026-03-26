@@ -158,13 +158,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }} # 这个用户名是你在 Docker Hub 上注册的用户名，必须保存在 GitHub Secrets 里，才能安全地使用
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Tag image
+        env:
+          IMAGE_TAGS: ${{ needs.build.outputs.IMAGE_TAGS }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          IMAGE_TAGS="${{ needs.build.outputs.IMAGE_TAGS }}"
-          docker tag simonzhang1996/learning-github-action:${IMAGE_TAGS} ${{ secrets.DOCKERHUB_USERNAME }}/learning-github-action:${IMAGE_TAGS}
+          docker tag simonzhang1996/learning-github-action:${IMAGE_TAGS} ${DOCKERHUB_USERNAME}/learning-github-action:${IMAGE_TAGS}
       - name: Push image to Docker Hub
+        env:
+          IMAGE_TAGS: ${{ needs.build.outputs.IMAGE_TAGS }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          IMAGE_TAGS="${{ needs.build.outputs.IMAGE_TAGS }}"
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/learning-github-action:${IMAGE_TAGS} 
+          docker push ${DOCKERHUB_USERNAME}/learning-github-action:${IMAGE_TAGS}
 
 
 
