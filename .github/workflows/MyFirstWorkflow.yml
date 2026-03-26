@@ -44,8 +44,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-          with:
-            fetch-depth: 0 # 这个参数很重要，必须设置为 0，才能让 SonarQube 获取完整的 git 历史记录，正确分析代码质量
+        with:
+          fetch-depth: 0 # 这个参数很重要，必须设置为 0，才能让 SonarQube 获取完整的 git 历史记录，正确分析代码质量
       - name: Setup SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v6
         env:
