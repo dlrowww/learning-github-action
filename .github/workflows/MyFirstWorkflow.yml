@@ -50,7 +50,13 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 这个 token 是你在 SonarQube 上生成的访问令牌，必须保存在 GitHub Secrets 里，才能安全地使用
-        
+      - name: SonarQube quality gate check # 这个步骤是可选的，但强烈推荐添加。它会检查 SonarQube 的质量门是否通过，如果不通过，整个 workflow 就会失败，提醒你修复代码质量问题
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+
+
+
   codeql:
     name: CodeQL security scan
     runs-on: ubuntu-latest
