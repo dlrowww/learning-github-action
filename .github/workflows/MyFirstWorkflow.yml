@@ -144,6 +144,9 @@ jobs:
     name: Publish Docker image to GitHub Container Registry
     runs-on: ubuntu-latest
     needs: build # 这个 job 依赖 build job，必须等 build 成功了才会执行
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Download Docker image artifact
         uses: actions/download-artifact@v5.0.0
@@ -168,6 +171,34 @@ jobs:
           IMAGE_TAGS: ${{ needs.build.outputs.IMAGE_TAGS }}
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/learning-github-action:${IMAGE_TAGS}
-
+  publish:
+    name: Publish Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: build # 这个 job 依赖 build job，必须等 build 成功了才会执行
+    steps:
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: docker-image
+          path: .
+      - name: Load Docker image # 这个步骤是把上一步下载的 Docker 镜像 tar 包加载到当前的 Docker 环境里，这样你就可以在后续的步骤里使用这个镜像了
+        run: docker load -i docker-image.tar
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }} # 这个用户名是你在 Docker Hub 上注册的用户名，必须保存在 GitHub Secrets 里，才能安全地使用
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Tag image
+        env:
+          IMAGE_TAGS: ${{ needs.build.outputs.IMAGE_TAGS }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          docker tag simonzhang1996/learning-github-action:${IMAGE_TAGS} ${DOCKERHUB_USERNAME}/learning-github-action:${IMAGE_TAGS}
+      - name: Push image to Docker Hub
+        env:
+          IMAGE_TAGS: ${{ needs.build.outputs.IMAGE_TAGS }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          docker push ${DOCKERHUB_USERNAME}/learning-github-action:${IMAGE_TAGS}
 
 
