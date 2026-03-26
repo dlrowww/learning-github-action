@@ -103,7 +103,7 @@ jobs:
     name: Build and publish Docker image
     runs-on: ubuntu-latest
     needs: [sonarqube, codeql] # 这个 job 依赖前面三个 job，必须等它们都成功了才会执行
-    if: sucess()
+    if: success()
     # 这个条件是说：只有前面三个 job 都成功了，这个 job 才会执行，如果有任何一个失败了，这个 job 就会被跳过
     steps:
       - name: Checkout code
