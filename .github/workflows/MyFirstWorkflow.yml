@@ -99,9 +99,39 @@ jobs:
         with:
           category: "security"
         # category = 这个扫描的类型，security 就是安全扫描
-  
-
-
+  build:
+    name: Build and publish Docker image
+    runs-on: ubuntu-latest
+    needs: [sonarqube, codeql] # 这个 job 依赖前面三个 job，必须等它们都成功了才会执行
+    if sucess() # 这个条件是说：只有前面三个 job 都成功了，这个 job 才会执行，如果有任何一个失败了，这个 job 就会被跳过
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Setup docker buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Generate Image Tag
+        id: vars
+        run: |
+          IMAGE_TAGS = "${{ github.run_id }}-${{ GITHUB_SHA::7 }}" 
+        # 这个 tag 是用来标识这次构建的唯一标识，通常会包含 run_id 和 commit 的前7位哈希值，这样每次构建都会有一个独特的 tag
+          echo "IMAGE_TAGS=$IMAGE_TAGS" >> $GITHUB_OUTPUT 
+        # 这个命令是把 IMAGE_TAGS 这个变量的值输出到 GitHub Actions 的输出变量里，这样后续的步骤就可以通过 ${{ steps.vars.outputs.IMAGE_TAGS }} 来使用这个 tag
+      - name: Build Image (no push)
+      # 这个步骤是构建 Docker 镜像，但不推送到 Docker Hub，等测试通过了再推送
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false # 这个参数是说：先构建镜像，但不推送到 Docker Hub，等测试通过了再推送
+          tags: simonzhang1996/learning-github-action:${{ steps.vars.outputs.IMAGE_TAGS }} # 这个 tag 是我们在上一步生成的唯一标识，用来标记这次构建的镜像
+      - name: Save Docker image as artifact
+        run: |
+          docker save simonzhang1996/learning-github-action:${{ steps.vars.outputs.IMAGE_TAGS }} -o docker-image.tar
+        # 这个命令是把构建好的 Docker 镜像保存成一个 tar
+        with:
+          name: docker-image
+          path: docker-image.tar
+      
 
 
 
