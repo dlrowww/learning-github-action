@@ -26,7 +26,7 @@ jobs:
       - name: Run unit test
         run: |
           mkdir -p reports/
-          pytest --junitxml=reports/unit-test-results.xml --cov=. --cov-report=xml --cov-report=term-missing -v
+          pytest --junitxml=reports/unit-test-results.xml --cov=. --cov-report=xml:reports/coverage.xml --cov-report=term-missing -v
         # pytest        → 跑测试
         # -v            → 显示详细结果
         # --junitxml    → 导出测试报告
@@ -40,12 +40,19 @@ jobs:
   
   sonarqube:  
     name: SonarQube code analysis
+    needs: unit-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0 # 这个参数很重要，必须设置为 0，才能让 SonarQube 获取完整的 git 历史记录，正确分析代码质量
+      - name: Download unit test artifact # 这个步骤是把上一个 job 生成的测试报告下载下来，供 SonarQube 使用
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: unit-test-report
+          path: reports/
+
       - name: Setup SonarQube Scanner # 这个 action 是 SonarSource 官方提供的，用来在 GitHub Actions 里运行 SonarQube 扫描的
         uses: SonarSource/sonarqube-scan-action@v6
         env:
