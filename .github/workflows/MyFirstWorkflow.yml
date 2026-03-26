@@ -125,6 +125,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: false 
+          logs: true
 # 这个参数是说：先构建镜像，但不推送到 Docker Hub，等测试通过了再推送
           tags: simonzhang1996/learning-github-action:${{ steps.vars.outputs.IMAGE_TAGS }} # 这个 tag 是我们在上一步生成的唯一标识，用来标记这次构建的镜像
       - name: Save Docker image as artifact
