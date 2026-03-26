@@ -113,7 +113,8 @@ jobs:
       - name: Generate Image Tag
         id: vars
         run: |
-          IMAGE_TAGS="${{ github.run_id }}-${{ GITHUB_SHA::7 }}" 
+          SHORT_SHA="${GITHUB_SHA::7}"
+          IMAGE_TAGS="${{ github.run_id }}-$SHORT_SHA" 
           echo "IMAGE_TAGS=$IMAGE_TAGS" >> $GITHUB_OUTPUT 
         # 这个 tag 是用来标识这次构建的唯一标识，通常会包含 run_id 和 commit 的前7位哈希值，这样每次构建都会有一个独特的 tag
         # 这个命令是把 IMAGE_TAGS 这个变量的值输出到 GitHub Actions 的输出变量里，这样后续的步骤就可以通过 ${{ steps.vars.outputs.IMAGE_TAGS }} 来使用这个 tag
