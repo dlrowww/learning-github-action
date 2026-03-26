@@ -109,13 +109,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Setup docker buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v3.0.0
       - name: Generate Image Tag
         id: vars
         run: |
-          IMAGE_TAGS = "${{ github.run_id }}-${{ GITHUB_SHA::7 }}" 
-        # 这个 tag 是用来标识这次构建的唯一标识，通常会包含 run_id 和 commit 的前7位哈希值，这样每次构建都会有一个独特的 tag
+          IMAGE_TAGS ="${{ github.run_id }}-${{ GITHUB_SHA::7 }}" 
           echo "IMAGE_TAGS=$IMAGE_TAGS" >> $GITHUB_OUTPUT 
+        # 这个 tag 是用来标识这次构建的唯一标识，通常会包含 run_id 和 commit 的前7位哈希值，这样每次构建都会有一个独特的 tag
         # 这个命令是把 IMAGE_TAGS 这个变量的值输出到 GitHub Actions 的输出变量里，这样后续的步骤就可以通过 ${{ steps.vars.outputs.IMAGE_TAGS }} 来使用这个 tag
       - name: Build Image (no push)
       # 这个步骤是构建 Docker 镜像，但不推送到 Docker Hub，等测试通过了再推送
