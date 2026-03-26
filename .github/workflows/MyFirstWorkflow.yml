@@ -46,11 +46,11 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0 # 这个参数很重要，必须设置为 0，才能让 SonarQube 获取完整的 git 历史记录，正确分析代码质量
-      - name: Setup SonarQube Scanner
+      - name: Setup SonarQube Scanner # 这个 action 是 SonarSource 官方提供的，用来在 GitHub Actions 里运行 SonarQube 扫描的
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 这个 token 是你在 SonarQube 上生成的访问令牌，必须保存在 GitHub Secrets 里，才能安全地使用
-
+        
   codeql:
     name: CodeQL security scan
     runs-on: ubuntu-latest
