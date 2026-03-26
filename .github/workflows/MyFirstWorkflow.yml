@@ -38,7 +38,7 @@ jobs:
           name: unit-test-report
           path: reports/
   
-   sonarqube:  
+  sonarqube:  
     name: SonarQube code analysis
     runs-on: ubuntu-latest
     steps:
