@@ -123,12 +123,15 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: false # 这个参数是说：先构建镜像，但不推送到 Docker Hub，等测试通过了再推送
+          push: false 
+# 这个参数是说：先构建镜像，但不推送到 Docker Hub，等测试通过了再推送
           tags: simonzhang1996/learning-github-action:${{ steps.vars.outputs.IMAGE_TAGS }} # 这个 tag 是我们在上一步生成的唯一标识，用来标记这次构建的镜像
       - name: Save Docker image as artifact
-        run: |
-          docker save simonzhang1996/learning-github-action:${{ steps.vars.outputs.IMAGE_TAGS }} -o docker-image.tar
-        # 这个命令是把构建好的 Docker 镜像保存成一个 tar
+        run: docker save simonzhang1996/learning-github-action:${{ steps.vars.outputs.IMAGE_TAGS }} -o docker-image.tar
+# 这个命令是把构建好的 Docker 镜像保存成一个 tar
+      - name: Upload Docker image artifact
+# 这个步骤是把上一步保存的 Docker 镜像 tar 包上传到 GitHub Actions 的 artifact 里，这样你就可以在 workflow 的界面里下载这个镜像，或者在后续的 job 里使用这个镜像
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: docker-image
           path: docker-image.tar
