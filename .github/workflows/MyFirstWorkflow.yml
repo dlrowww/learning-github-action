@@ -36,14 +36,42 @@ jobs:
         with:
           name: unit-test-report
           path: reports/
-
-
-
-
-
-
-
-
+  
+  codeql:
+    name: CodeQL security scan
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    # permissions = 这个 workflow 能做什么
+    # read = 只能看
+    # write = 可以改/上传
+    # CodeQL 必须有 security-events: write 才能上传扫描结果
+    # CodeQL = GitHub 的“代码安全扫描工具”
+    # 它会自动帮你检查代码里有没有漏洞（比如 SQL 注入、XSS、路径注入等）
+    strategy:
+      matrix:
+        language: ['python']
+    # matrix ≈ for循环
+    # 这里的意思是：这个 job 会针对 matrix 里定义的每种语言都执行一次 
+    # 我要用 CodeQL 去分析 检查“仓库里的代码”，不是检查 workflow 本身”   多语言，多系统，多版本
+    #  matrix:
+    # python-version: ['3.10', '3.11', '3.12'] 
+    steps:
+      - name: Checkout repository # 把仓库里的代码拉下来，准备分析
+        uses: actions/checkout@v6.0.2
+      - name: Initialize CodeQL    # 初始化 CodeQL
+        uses: github/codeql-action/init@v2.0.0 
+        with:
+          languages: ${{ matrix.language }} 
+      - name: Autobuild # 自动构建
+        uses: github/codeql-action/autobuild@v2.0.0 # 这个 action 会帮你自动编译代码，准备好供 CodeQL 分析的环境
+      - name: Perform CodeQL Analysis # 执行 CodeQL 分析
+        uses: github/codeql-action/analyze@v2.0.0
+        with:
+          category: "security"
+        # category = 这个扫描的类型，security 就是安全扫描
 
 
 
