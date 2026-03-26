@@ -1,0 +1,28 @@
+
+#忽略 Git 和 CI 文件
+.git
+.gitignore
+.github/
+sonar-project.properties
+
+# 忽略测试文件和编译文件
+tests/
+test/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+test_*
+
+# 忽略本地开发环境
+.env
+venv/
+.envrc
+*.sqlite3
+*.db
+.DS_Store
+
+# 忽略 Docker 相关文件
+Dockerfile
+.dockerignore
