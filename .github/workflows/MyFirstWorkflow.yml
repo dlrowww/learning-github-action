@@ -103,7 +103,10 @@ jobs:
     name: Build and publish Docker image
     runs-on: ubuntu-latest
     needs: [sonarqube, codeql] # 这个 job 依赖前面三个 job，必须等它们都成功了才会执行
-    if: success()
+    if: success() 
+    outputs:
+      IMAGE_TAGS: ${{ steps.vars.outputs.IMAGE_TAGS }}
+    # outputs = 这个 job 想要输出的变量，后续的 job 可以通过 needs.build.outputs.IMAGE_TAGS 来使用这个变量
     # 这个条件是说：只有前面三个 job 都成功了，这个 job 才会执行，如果有任何一个失败了，这个 job 就会被跳过
     steps:
       - name: Checkout code
@@ -137,8 +140,31 @@ jobs:
         with:
           name: docker-image
           path: docker-image.tar
-      
-
+  publish:
+    name: Publish Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: build # 这个 job 依赖 build job，必须等 build 成功了才会执行
+    steps:
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: docker-image
+          path: .
+      - name: Load Docker image # 这个步骤是把上一步下载的 Docker 镜像 tar 包加载到当前的 Docker 环境里，这样你就可以在后续的步骤里使用这个镜像了
+        run: docker load -i docker-image.tar
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }} # 这个用户名是你在 Docker Hub 上注册的用户名，必须保存在 GitHub Secrets 里，才能安全地使用
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Tag image
+        run: |
+          IMAGE_TAGS="${{ needs.build.outputs.IMAGE_TAGS }}"
+          docker tag simonzhang1996/learning-github-action:${IMAGE_TAGS} ${{ secrets.DOCKERHUB_USERNAME }}/learning-github-action:${IMAGE_TAGS}
+      - name: Push image to Docker Hub
+        run: |
+          IMAGE_TAGS="${{ needs.build.outputs.IMAGE_TAGS }}"
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/learning-github-action:${IMAGE_TAGS} 
 
 
 
